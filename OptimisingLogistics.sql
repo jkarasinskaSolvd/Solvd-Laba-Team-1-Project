@@ -38,8 +38,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Optimising logistics for order fulfilment`.`Products` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `price` DECIMAL(10,2) NOT NULL DEFAULT >= 0,
-  `volume` DECIMAL(10,2) NOT NULL DEFAULT > 0,
+  `price` DECIMAL(10,2) NOT NULL CHECK (price > 0),
+  `volume` DECIMAL(10,2) NOT NULL CHECK (volume > 0),
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -50,8 +50,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Optimising logistics for order fulfilment`.`Transport` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `type` ENUM('Truck', 'Train', 'Airplane') NOT NULL,
-  `max_capacity` DECIMAL(10,2) NOT NULL DEFAULT >0,
-  `cost_per_km` DECIMAL(10,2) NOT NULL DEFAULT >=0,
+  `max_capacity` DECIMAL(10,2) NOT NULL CHECK (max_capacity > 0),
+  `cost_per_km` DECIMAL(10,2) NOT NULL CHECK (cost_per_km > 0),
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -127,10 +127,10 @@ ENGINE = InnoDB;
 -- Table `Optimising logistics for order fulfilment`.`Warehouse_AllowedTransport`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Optimising logistics for order fulfilment`.`Warehouse_AllowedTransport` (
-  `warehouse_id` BIGINT(20) NOT NULL,
+  `warehouse_AllowedTransport_id` BIGINT(20) NOT NULL,
   `transport_type_warehouse` ENUM('Truck', 'Train', 'Airplane') NOT NULL,
-  CONSTRAINT `warehouse_id`
-    FOREIGN KEY (`warehouse_id`)
+  CONSTRAINT `warehouse_AllowedTransport_id`
+    FOREIGN KEY (`warehouse_AllowedTransport_id`)
     REFERENCES `Optimising logistics for order fulfilment`.`Warehouses` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
@@ -158,16 +158,16 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Optimising logistics for order fulfilment`.`OrderItems` (
   `order_id` BIGINT(20) NOT NULL,
-  `product_id` BIGINT(20) NOT NULL,
-  `quantity_OrderItems` INT NOT NULL DEFAULT >0,
-  INDEX `product_id_idx` (`product_id` ASC) VISIBLE,
+  `product_id_OrderItems` BIGINT(20) NOT NULL,
+  `quantity_OrderItems` INT NOT NULL CHECK (quantity_OrderItems > 0),
+  INDEX `product_id_OrderItems_idx` (`product_id_OrderItems` ASC) VISIBLE,
   CONSTRAINT `order_id`
     FOREIGN KEY (`order_id`)
     REFERENCES `Optimising logistics for order fulfilment`.`Orders` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `product_id`
-    FOREIGN KEY (`product_id`)
+  CONSTRAINT `product_id_OrderItems`
+    FOREIGN KEY (`product_id_OrderItems`)
     REFERENCES `Optimising logistics for order fulfilment`.`Products` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
