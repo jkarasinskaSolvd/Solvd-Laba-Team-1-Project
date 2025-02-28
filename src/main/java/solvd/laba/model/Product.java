@@ -39,4 +39,42 @@ public class Product {
     public void setVolume(BigDecimal volume) {
         this.volume = volume;
     }
+
+    public Product(Builder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.price = builder.price;
+        this.volume = builder.volume;
+    }
+
+    public static class Builder {
+        private Long id;
+        private String name;
+        private BigDecimal price;
+        private BigDecimal volume;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder price(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder volume(BigDecimal volume) {
+            this.volume = volume;
+            return this;
+        }
+
+        public Product build() {
+            return new Product(this);
+        }
+    }
 }

@@ -39,4 +39,42 @@ public class Transport {
     public void setCostPerKm(BigDecimal costPerKm) {
         this.costPerKm = costPerKm;
     }
+
+    public Transport(Builder builder) {
+        this.id = builder.id;
+        this.type = builder.type;
+        this.maxCapacity = builder.maxCapacity;
+        this.costPerKm = builder.costPerKm;
+    }
+
+    public static class Builder {
+        private Long id;
+        private TransportType type;
+        private BigDecimal maxCapacity;
+        private BigDecimal costPerKm;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder type(TransportType type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder maxCapacity(BigDecimal maxCapacity) {
+            this.maxCapacity = maxCapacity;
+            return this;
+        }
+
+        public Builder costPerKm(BigDecimal costPerKm) {
+            this.costPerKm = costPerKm;
+            return this;
+        }
+
+        public Transport build() {
+            return new Transport(this);
+        }
+    }
 }
