@@ -30,4 +30,35 @@ public class Order {
     public void setAddress(Address address) {
         this.address = address;
     }
+
+    public Order(Builder builder) {
+        this.id = builder.id;
+        this.orderItems = builder.orderItems;
+        this.address = builder.address;
+    }
+
+    public static class Builder {
+        private Long id;
+        private List<OrderItem> orderItems;
+        private Address address;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder orderItems(List<OrderItem> orderItems) {
+            this.orderItems = orderItems;
+            return this;
+        }
+
+        public Builder address(Address address) {
+            this.address = address;
+            return this;
+        }
+
+        public Order build() {
+            return new Order(this);
+        }
+    }
 }
