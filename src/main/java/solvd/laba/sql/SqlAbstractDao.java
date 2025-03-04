@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public abstract class SqlAbstractDao {
-    //TODO URL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private static String url = "jdbc:mysql://localhost:3306/Optimising logistics for order fulfilment";
     private static String user = "root";
     private static String password = "12345";

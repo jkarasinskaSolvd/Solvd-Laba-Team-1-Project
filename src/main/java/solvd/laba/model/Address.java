@@ -9,6 +9,8 @@ public class Address {
     private String apartment;
     private String postalCode;
 
+
+
     public Long getId() {
         return id;
     }

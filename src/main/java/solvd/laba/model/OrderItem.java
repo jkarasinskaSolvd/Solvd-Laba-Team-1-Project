@@ -1,6 +1,5 @@
 package solvd.laba.model;
 
-import java.util.List;
 
 public class OrderItem {
     private Product product;
