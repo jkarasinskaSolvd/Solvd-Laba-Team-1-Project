@@ -6,36 +6,48 @@ import solvd.laba.service.IAddressService;
 
 import java.util.List;
 
-public class AddressServiceImpl implements IAddressService {
-    private final IDaoAddress addressDao;
 
-    public AddressServiceImpl(IDaoAddress addressDao) {
-        this.addressDao = addressDao;
+public class AddressServiceImpl implements IAddressService {
+    private final IDaoAddress daoAddress;
+
+    public AddressServiceImpl(IDaoAddress daoAddress) {
+        this.daoAddress = daoAddress;
     }
 
     @Override
     public Address create(Address address) {
-        return addressDao.create(address);
+        if (address == null) {
+            throw new IllegalArgumentException("Address cannot be null");
+        }
+        return daoAddress.create(address);
     }
 
     @Override
     public Address read(Long id) {
-        return addressDao.read(id);
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Invalid address ID");
+        }
+        return daoAddress.read(id);
     }
 
     @Override
     public List<Address> readAll() {
-        return addressDao.readAll();
+        return daoAddress.readAll();
     }
 
     @Override
     public Address update(Address address) {
-        return addressDao.update(address);
+        if (address == null || address.getId() == null || address.getId() <= 0) {
+            throw new IllegalArgumentException("Invalid address");
+        }
+        return daoAddress.update(address);
     }
 
     @Override
     public Long remove(Long id) {
-        return addressDao.remove(id);
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Invalid address ID");
+        }
+        return daoAddress.remove(id);
     }
-
 }

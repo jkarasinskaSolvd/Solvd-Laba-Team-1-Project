@@ -7,34 +7,47 @@ import solvd.laba.service.IProductService;
 import java.util.List;
 
 public class ProductServiceImpl implements IProductService {
-    private final IDaoProduct productDao;
+    private final IDaoProduct daoProduct;
 
-    public ProductServiceImpl(IDaoProduct productDao) {
-        this.productDao = productDao;
+    public ProductServiceImpl(IDaoProduct daoProduct) {
+
+        this.daoProduct = daoProduct;
     }
 
     @Override
     public Product create(Product product) {
-        return productDao.create(product);
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+        return daoProduct.create(product);
     }
 
     @Override
     public Product read(Long id) {
-        return productDao.read(id);
+        if (id == null) {
+            throw new IllegalArgumentException("Invalid product ID");
+        }
+        return daoProduct.read(id);
     }
 
     @Override
     public List<Product> readAll() {
-        return productDao.readAll();
+        return daoProduct.readAll();
     }
 
     @Override
     public Product update(Product product) {
-        return productDao.update(product);
+        if (product == null) {
+            throw new IllegalArgumentException("Invalid product or productID");
+        }
+        return daoProduct.update(product);
     }
 
     @Override
     public Long remove(Long id) {
-        return productDao.remove(id);
+        if (id == null) {
+            throw new IllegalArgumentException("Invalid product ID");
+        }
+        return daoProduct.remove(id);
     }
 }

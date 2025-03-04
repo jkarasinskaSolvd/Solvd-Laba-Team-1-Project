@@ -2,7 +2,6 @@ package solvd.laba.sql;
 
 
 import solvd.laba.idao.IDaoCompany;
-import solvd.laba.model.Address;
 import solvd.laba.model.Company;
 import solvd.laba.model.Transport;
 

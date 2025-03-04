@@ -6,35 +6,69 @@ import solvd.laba.service.IOrderItemService;
 
 import java.util.List;
 
-public class OrderItemServiceImpl implements IOrderItemService{
 
-    private final IDaoOrderItem orderItemDao;
-    public OrderItemServiceImpl(IDaoOrderItem orderItemDao){
-        this.orderItemDao=orderItemDao;
+public class OrderItemServiceImpl implements IOrderItemService {
+
+    private final IDaoOrderItem daoOrderItem;
+
+    public OrderItemServiceImpl(IDaoOrderItem daoOrderItem) {
+        this.daoOrderItem = daoOrderItem;
     }
 
     @Override
-    public OrderItem create(OrderItem orderItem) {
-        return orderItemDao.create(orderItem);
+    public OrderItem createByOrder(OrderItem orderItem, Long orderId) {
+        if (orderItem == null || orderId == null) {
+            throw new IllegalArgumentException("Invalid OrderItem or order ID");
+        }
+        return daoOrderItem.createByOrder(orderItem, orderId);
     }
 
     @Override
-    public OrderItem read(Long id) {
-        return orderItemDao.read(id);
+    public OrderItem readByIds(Long orderId, Long productId) {
+        if (orderId == null || productId == null) {
+            throw new IllegalArgumentException("Invalid IDs");
+        }
+        return daoOrderItem.readByIds(orderId, productId);
+    }
+
+
+    @Override
+    public OrderItem updateByOrder(OrderItem orderItem, Long orderId) {
+        if (orderItem == null || orderId == null) {
+            throw new IllegalArgumentException("Invalid OrderItem or order ID");
+        }
+        return daoOrderItem.updateByOrder(orderItem, orderId);
     }
 
     @Override
-    public List<OrderItem> readAll() {
-        return orderItemDao.readAll();
+    public Boolean removeByIds(Long orderId, Long productId) {
+        if (orderId == null || productId == null) {
+            throw new IllegalArgumentException("Invalid IDs");
+        }
+        return daoOrderItem.removeByIds(orderId, productId);
     }
 
     @Override
-    public OrderItem update(OrderItem orderItem) {
-        return orderItemDao.update(orderItem);
+    public Boolean removeByOrder(Long orderId) {
+        if (orderId == null) {
+            throw new IllegalArgumentException("Invalid order ID");
+        }
+        return daoOrderItem.removeByOrder(orderId);
     }
 
     @Override
-    public Long remove(Long id) {
-        return orderItemDao.remove(id);
+    public Boolean removeByProduct(Long productId) {
+        if (productId == null) {
+            throw new IllegalArgumentException("Invalid product ID");
+        }
+        return daoOrderItem.removeByProduct(productId);
+    }
+
+    @Override
+    public List<OrderItem> readByOrder(Long orderId) {
+        if (orderId == null) {
+            throw new IllegalArgumentException("Invalid order ID");
+        }
+        return daoOrderItem.readByOrder(orderId);
     }
 }

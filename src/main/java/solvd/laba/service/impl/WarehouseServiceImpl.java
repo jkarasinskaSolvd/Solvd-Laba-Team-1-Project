@@ -7,34 +7,45 @@ import solvd.laba.service.IWarehouseService;
 import java.util.List;
 
 public class WarehouseServiceImpl implements IWarehouseService {
-    private final IDaoWarehouse warehouseDao;
-
-    public WarehouseServiceImpl(IDaoWarehouse warehouseDao) {
-        this.warehouseDao = warehouseDao;
+    private final IDaoWarehouse daoWarehouse;
+    public WarehouseServiceImpl(IDaoWarehouse daoWarehouse) {
+        this.daoWarehouse = daoWarehouse;
     }
 
     @Override
     public Warehouse create(Warehouse warehouse) {
-        return warehouseDao.create(warehouse);
+        if (warehouse == null) {
+            throw new IllegalArgumentException("Warehouse cannot be null");
+        }
+        return daoWarehouse.create(warehouse);
     }
 
     @Override
     public Warehouse read(Long id) {
-        return warehouseDao.read(id);
+        if (id == null) {
+            throw new IllegalArgumentException("Invalid warehouse ID");
+        }
+        return daoWarehouse.read(id);
     }
 
     @Override
     public List<Warehouse> readAll() {
-        return warehouseDao.readAll();
+        return daoWarehouse.readAll();
     }
 
     @Override
     public Warehouse update(Warehouse warehouse) {
-        return warehouseDao.update(warehouse);
+        if (warehouse == null || warehouse.getId() == null) {
+            throw new IllegalArgumentException("Invalid warehouse or warehouse ID");
+        }
+        return daoWarehouse.update(warehouse);
     }
 
     @Override
     public Long remove(Long id) {
-        return warehouseDao.remove(id);
+        if (id == null) {
+            throw new IllegalArgumentException("Invalid warehouse ID");
+        }
+        return daoWarehouse.remove(id);
     }
 }

@@ -1,16 +1,18 @@
 package solvd.laba.service;
 
-import solvd.laba.model.Address;
+
 import solvd.laba.model.Distance;
-import solvd.laba.model.Warehouse;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
-
 
 public interface IDistanceService {
-    Optional<BigDecimal> getDistance(Warehouse warehouse, Address deliveryAddress);
+    Boolean removeByIds(Long warehouseId, Long deliveryAddressId);
+    Boolean removeByDelivery(Long deliveryAddressId);
+    Boolean removeByWarehouse(Long warehouseId);
+    Distance create(Distance entity);
+    Distance read(Long id);
+    List<Distance> readAll();
+    Distance update(Distance entity);
 
-    List<Distance> getAllDistances();
 }
+

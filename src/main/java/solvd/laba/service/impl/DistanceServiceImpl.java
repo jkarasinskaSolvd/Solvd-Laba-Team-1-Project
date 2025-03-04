@@ -1,34 +1,69 @@
 package solvd.laba.service.impl;
 
-import solvd.laba.model.Address;
+
+import solvd.laba.idao.IDaoDistance;
+
+
 import solvd.laba.model.Distance;
-import solvd.laba.model.Warehouse;
 import solvd.laba.service.IDistanceService;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
-
-public class DistanceServiceImpl implements IDistanceService {
 
 
-        private List<Distance> distances;
+public class DistanceServiceImpl  implements IDistanceService {
+    private final IDaoDistance daoDistance;
 
-        // Constructor that accepts a list of distances
-    public DistanceServiceImpl(List<Distance> distances) {
-            this.distances = distances;
-        }
-
-        // Implementation of a method to obtain distance for a specific warehouse and delivery address
-        @Override
-        public Optional<BigDecimal> getDistance(Warehouse warehouse, Address deliveryAddress) {
-            return distances.stream()
-                    .filter(distance -> distance.getWarehouse().equals(warehouse) && distance.getDeliveryAddress().equals(deliveryAddress))
-                    .map(Distance::getDistance)
-                    .findFirst();
-        }
-    @Override
-    public List<Distance> getAllDistances() {
-        return distances;
+    public DistanceServiceImpl(IDaoDistance daoDistance) {
+        this.daoDistance = daoDistance;
     }
+
+    @Override
+    public Distance create(Distance distance) {
+        if (distance == null || distance.getWarehouse() == null || distance.getDeliveryAddress() == null) {
+            throw new IllegalArgumentException("Invalid Distance object or its related entities");
+        }
+        return daoDistance.create(distance);
+    }
+
+    @Override
+    public Distance read(Long id) {
+        return daoDistance.read(id);
+    }
+
+    @Override
+    public List<Distance> readAll() {
+        return daoDistance.readAll();
+    }
+
+    @Override
+    public Distance update(Distance distance) {
+        if (distance == null || distance.getWarehouse() == null || distance.getDeliveryAddress() == null) {
+            throw new IllegalArgumentException("Invalid Distance object or its related entities");
+        }
+        return daoDistance.update(distance);
+    }
+
+
+    @Override
+    public Boolean removeByIds(Long warehouseId, Long deliveryAddressId) {
+        if (warehouseId == null || deliveryAddressId == null) {
+            throw new IllegalArgumentException("Invalid IDs");
+        }
+        return daoDistance.removeByIds(warehouseId, deliveryAddressId);
+    }
+    @Override
+    public Boolean removeByWarehouse(Long warehouseId) {
+        if (warehouseId == null) {
+            throw new IllegalArgumentException("Invalid warehouse ID");
+        }
+        return daoDistance.removeByWarehouse(warehouseId);
+    }
+    @Override
+    public Boolean removeByDelivery(Long deliveryAddressId) {
+        if (deliveryAddressId == null) {
+            throw new IllegalArgumentException("Invalid delivery address ID");
+        }
+        return daoDistance.removeByDelivery(deliveryAddressId);
+    }
+
 }
