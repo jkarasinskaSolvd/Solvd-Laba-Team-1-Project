@@ -1,37 +1,64 @@
 package solvd.laba.model;
 
+import java.math.BigDecimal;
+
 public class Distance {
-    private Long idWarehouse;
-    private Long idDeliveryAddress;
-    private double distanceInKm;
-    public Distance(Long idWarehouse, Long idDeliveryAddress, double distanceInKm) {
-        this.idWarehouse = idWarehouse;
-        this.idDeliveryAddress = idDeliveryAddress;
-        this.distanceInKm = distanceInKm;
+    private Warehouse warehouse;
+    private Address deliveryAddress;
+    private BigDecimal distance;
+
+    public Warehouse getWarehouse() {
+        return warehouse;
     }
 
-    // Геттеры и сеттеры
-    public Long getIdWarehouse() {
-        return idWarehouse;
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
     }
 
-    public void setIdWarehouse(Long idWarehouse) {
-        this.idWarehouse = idWarehouse;
+    public Address getDeliveryAddress() {
+        return deliveryAddress;
     }
 
-    public Long getIdDeliveryAddress() {
-        return idDeliveryAddress;
+    public void setDeliveryAddress(Address deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 
-    public void setIdDeliveryAddress(Long idDeliveryAddress) {
-        this.idDeliveryAddress = idDeliveryAddress;
+    public BigDecimal getDistance() {
+        return distance;
     }
 
-    public double getDistanceInKm() {
-        return distanceInKm;
+    public void setDistance(BigDecimal distance) {
+        this.distance = distance;
     }
 
-    public void setDistanceInKm(double distanceInKm) {
-        this.distanceInKm = distanceInKm;
+    public Distance(Builder builder) {
+        this.warehouse = builder.warehouse;
+        this.deliveryAddress = builder.deliveryAddress;
+        this.distance = builder.distance;
+    }
+
+    public static class Builder {
+        private Warehouse warehouse;
+        private Address deliveryAddress;
+        private BigDecimal distance;
+
+        public Builder warehouse(Warehouse warehouse) {
+            this.warehouse = warehouse;
+            return this;
+        }
+
+        public Builder deliveryAddress(Address deliveryAddress) {
+            this.deliveryAddress = deliveryAddress;
+            return this;
+        }
+
+        public Builder distance(BigDecimal distance) {
+            this.distance = distance;
+            return this;
+        }
+
+        public Distance build() {
+            return new Distance(this);
+        }
     }
 }

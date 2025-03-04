@@ -177,13 +177,13 @@ ENGINE = InnoDB;
 -- Table `Optimising logistics for order fulfilment`.`Distance`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Optimising logistics for order fulfilment`.`Distance` (
-  `warehouse_id_ distance` BIGINT(20) NOT NULL,
+  `warehouse_id_distance` BIGINT(20) NOT NULL,
   `delivery_address_id_distance` BIGINT(20) NOT NULL,
   `distance_km` DECIMAL(10,2) NOT NULL CHECK (distance_km > 0),
   INDEX `warehouse_id_distance_idx` (`warehouse_id_ distance` ASC) VISIBLE,
   INDEX `delivery_address_id_distance_idx` (`delivery_address_id_distance` ASC) VISIBLE,
   CONSTRAINT `warehouse_id_distance`
-    FOREIGN KEY (`warehouse_id_ distance`)
+    FOREIGN KEY (`warehouse_id_distance`)
     REFERENCES `Optimising logistics for order fulfilment`.`Warehouses` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
