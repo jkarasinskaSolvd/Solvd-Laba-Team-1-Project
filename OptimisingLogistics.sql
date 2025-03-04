@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `Optimising logistics for order fulfilment`.`Distance
   INDEX `warehouse_id_distance_idx` (`warehouse_id_distance` ASC) VISIBLE,
   INDEX `delivery_address_id_distance_idx` (`delivery_address_id_distance` ASC) VISIBLE,
   CONSTRAINT `warehouse_id_distance`
-    FOREIGN KEY (`warehouse_id_ distance`)
+    FOREIGN KEY (`warehouse_id_distance`)
     REFERENCES `Optimising logistics for order fulfilment`.`Warehouses` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
