@@ -16,7 +16,7 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
 
     @Override
     public OrderItem createByOrder(OrderItem entity, Long orderId) {
-        String sqlStatement = "INSERT INTO OrderItems (order_id, product_id_OrderItems, quantity_OrderItems) VALUES (?, ?, ?)";
+        String sqlStatement = "INSERT INTO OrderItems (order_id, product_id_order_items, quantity_order_items) VALUES (?, ?, ?)";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setLong(1, orderId);
             preparedStatement.setLong(2, entity.getProduct().getId());
@@ -38,15 +38,15 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
 
     @Override
     public OrderItem readByIds(Long orderId, Long productId) {
-        String sqlStatement = "SELECT * FROM OrderItems WHERE order_id = ? AND product_id_OrderItems = ?";
+        String sqlStatement = "SELECT * FROM OrderItems WHERE order_id = ? AND product_id_order_items = ?";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, orderId);
             preparedStatement.setLong(2, productId);
             try (ResultSet resultSet = preparedStatement.executeQuery();) {
                 if (resultSet.next()) {
                     return new OrderItem.Builder()
-                            .product(new SqlDaoProduct().read(resultSet.getLong("product_id_OrderItems")))
-                            .quantity(resultSet.getInt("quantity_OrderItems"))
+                            .product(new SqlDaoProduct().read(resultSet.getLong("product_id_order_items")))
+                            .quantity(resultSet.getInt("quantity_order_items"))
                             .build();
                 } else {
                     return null;
@@ -65,8 +65,8 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
                 List<OrderItem> items = new ArrayList<>();
                 while (resultSet.next()) {
                     items.add(new OrderItem.Builder()
-                            .product(new SqlDaoProduct().read(resultSet.getLong("product_id_OrderItems")))
-                            .quantity(resultSet.getInt("quantity_OrderItems"))
+                            .product(new SqlDaoProduct().read(resultSet.getLong("product_id_order_items")))
+                            .quantity(resultSet.getInt("quantity_order_items"))
                             .build());
                 }
                 return items;
@@ -85,8 +85,8 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
                 List<OrderItem> items = new ArrayList<>();
                 while (resultSet.next()) {
                     items.add(new OrderItem.Builder()
-                            .product(new SqlDaoProduct().read(resultSet.getLong("product_id_OrderItems")))
-                            .quantity(resultSet.getInt("quantity_OrderItems"))
+                            .product(new SqlDaoProduct().read(resultSet.getLong("product_id_order_items")))
+                            .quantity(resultSet.getInt("quantity_order_items"))
                             .build());
                 }
                 return items;
@@ -104,7 +104,7 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
 
     @Override
     public OrderItem updateByOrder(OrderItem entity, Long orderId) {
-        String sqlStatement = "UPDATE OrderItems SET quantity_OrderItems = ? WHERE order_id = ? AND product_id_OrderItems = ?;";
+        String sqlStatement = "UPDATE OrderItems SET quantity_order_items = ? WHERE order_id = ? AND product_id_order_items = ?;";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, entity.getQuantity());
             preparedStatement.setLong(2, orderId);
@@ -127,7 +127,7 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
 
     @Override
     public Boolean removeByIds(Long orderId, Long productId) {
-        String sqlStatement = "DELETE FROM OrderItems WHERE order_id = ? AND product_id_OrderItems = ?";
+        String sqlStatement = "DELETE FROM OrderItems WHERE order_id = ? AND product_id_order_items = ?";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, orderId);
             preparedStatement.setLong(2, productId);
@@ -156,7 +156,7 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
 
     @Override
     public Boolean removeByProduct(Long productId) {
-        String sqlStatement = "DELETE FROM OrderItems WHERE product_id_OrderItems = ?";
+        String sqlStatement = "DELETE FROM OrderItems WHERE product_id_order_items = ?";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(2, productId);
             if ( preparedStatement.executeUpdate() == 0) {

@@ -119,7 +119,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
             }
         }
         for (TransportType transportType : entity.getAllowedTransportTypes()) {
-            String sqlStatement = "INSERT INTO Warehouse_AllowedTransport (warehouse_AllowedTransport_id, transport_type_warehouse) VALUES (?, ?)";
+            String sqlStatement = "INSERT INTO WarehouseAllowedTransport (warehouse_allowed_transport_id, transport_type_warehouse) VALUES (?, ?)";
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
                 preparedStatement.setLong(1, entity.getId());
                 preparedStatement.setString(2, transportType.toString());
@@ -137,7 +137,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        sqlStatement = "DELETE FROM Warehouse_AllowedTransport WHERE warehouse_AllowedTransport_id = ?";
+        sqlStatement = "DELETE FROM WarehouseAllowedTransport WHERE warehouse_allowed_transport_id = ?";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
@@ -147,7 +147,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
     }
 
     private List<TransportType> readTransportTypes(Long id) {
-        String sqlStatement = "SELECT * FROM Warehouse_AllowedTransport WHERE warehouse_AllowedTransport_id = ?";
+        String sqlStatement = "SELECT * FROM WarehouseAllowedTransport WHERE warehouse_allowed_transport_id = ?";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery();) {
