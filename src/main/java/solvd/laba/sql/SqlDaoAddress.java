@@ -10,7 +10,7 @@ import java.util.List;
 public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
     @Override
     public Address create(Address entity) {
-        String sqlStatement = "INSERT INTO Address (country, city, street, building, apartment, postal_code) VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlStatement = "INSERT INTO Address (country, city, street, building, apartment, postal_code, coordinate_x, coordinate_y) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, entity.getCountry());
             preparedStatement.setString(2, entity.getCity());
@@ -18,6 +18,8 @@ public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
             preparedStatement.setString(4, entity.getBuilding());
             preparedStatement.setString(5, entity.getApartment());
             preparedStatement.setString(6, entity.getPostalCode());
+            preparedStatement.setDouble(7, entity.getX());
+            preparedStatement.setDouble(8, entity.getY());
             preparedStatement.executeUpdate();
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -45,6 +47,8 @@ public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
                             .building(resultSet.getString("building"))
                             .apartment(resultSet.getString("apartment"))
                             .postalCode(resultSet.getString("postal_code"))
+                            .x(resultSet.getDouble("coordinate_x"))
+                            .y(resultSet.getDouble("coordinate_y"))
                             .build();
                 } else {
                     return null;
@@ -70,6 +74,8 @@ public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
                             .building(resultSet.getString("building"))
                             .apartment(resultSet.getString("apartment"))
                             .postalCode(resultSet.getString("postal_code"))
+                            .x(resultSet.getDouble("coordinate_x"))
+                            .y(resultSet.getDouble("coordinate_y"))
                             .build());
                 }
                 return addresses;
@@ -81,7 +87,7 @@ public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
 
     @Override
     public Address update(Address entity) {
-        String sqlStatement = "UPDATE Address SET country = ?, city = ?, street = ?, building = ?, apartment = ?, postal_code = ? WHERE id = ?;";
+        String sqlStatement = "UPDATE Address SET country = ?, city = ?, street = ?, building = ?, apartment = ?, postal_code = ?, coordinate_x = ?, coordinate_y = ? WHERE id = ?;";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, entity.getCountry());
             preparedStatement.setString(2, entity.getCity());
@@ -89,7 +95,9 @@ public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
             preparedStatement.setString(4, entity.getBuilding());
             preparedStatement.setString(5, entity.getApartment());
             preparedStatement.setString(6, entity.getPostalCode());
-            preparedStatement.setLong(7, entity.getId());
+            preparedStatement.setDouble(7, entity.getX());
+            preparedStatement.setDouble(8, entity.getY());
+            preparedStatement.setLong(9, entity.getId());
             if ( preparedStatement.executeUpdate() == 0) {
                 return null;
             }
@@ -101,7 +109,6 @@ public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
 
     @Override
     public Long remove(Long id) {
-        new SqlDaoDistance().removeByDelivery(id);
         String sqlStatement = "DELETE FROM Address WHERE id = ?";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
