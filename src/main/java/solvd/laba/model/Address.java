@@ -157,4 +157,19 @@ public class Address {
             return new Address(this);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", building='" + building + '\'' +
+                ", apartment='" + apartment + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

@@ -77,4 +77,14 @@ public class Product {
             return new Product(this);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", volume=" + volume +
+                '}';
+    }
 }
