@@ -116,13 +116,13 @@ public class Algorithm {
         return  transportWithPricesMap;
     }
 
-    public void printResults(Map<Order,TransportWithPrice> transportWithPricesMap){
-        System.out.println("\n\nRESULTS \n\n");
+    public String printResults(Map<Order,TransportWithPrice> transportWithPricesMap){
+        StringBuilder stringBuilder = new StringBuilder("\n\nRESULTS \n\n");
         for (Map.Entry<Order,TransportWithPrice> entry : transportWithPricesMap.entrySet()) {
-            System.out.println(entry.getKey().toString());
-            System.out.println(entry.getValue().toString());
-            System.out.println("----------------------------");
+            stringBuilder.append(entry.getKey().toString()).append('\n');
+            stringBuilder.append(entry.getValue().toString()).append('\n');
+            stringBuilder.append("----------------------------"+'\n');
         }
-
+        return stringBuilder.toString();
     }
 }

@@ -9,6 +9,9 @@ import solvd.laba.service.impl.*;
 import solvd.laba.sql.*;
 
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +123,20 @@ public class Main {
         }
 
         Map< Order, TransportWithPrice> orderTransportWithPriceMap=  algorithm.compare(companies, orders);
-        algorithm.printResults(orderTransportWithPriceMap);
+
+        String result = algorithm.printResults(orderTransportWithPriceMap);
+
+        System.out.println(result);
+
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter("src/main/resources/result.txt"));
+            writer.write(result);
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 }
