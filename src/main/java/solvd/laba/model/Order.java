@@ -60,5 +60,15 @@ public class Order {
         public Order build() {
             return new Order(this);
         }
+
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderItems=" + orderItems +
+                ", address=" + address +
+                '}';
     }
 }
