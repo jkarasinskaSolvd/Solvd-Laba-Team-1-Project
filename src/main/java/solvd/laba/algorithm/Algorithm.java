@@ -89,7 +89,7 @@ public class Algorithm {
                 .sorted(Comparator.comparing(TransportWithPrice::getFullPrice))
                 .toList();
 
-        return  transportWithPrices.getFirst();
+        return  transportWithPrices.get(0);
     }
 
     public Map<Order,TransportWithPrice> compare(List<Company> companies, List<Order> orders){
@@ -106,7 +106,7 @@ public class Algorithm {
             transportWithPricesList = transportWithPricesList.stream()
                     .sorted(Comparator.comparing(TransportWithPrice::getFullPrice))
                     .toList();
-            transportWithPricesMap.put(order,transportWithPricesList.getFirst());
+            transportWithPricesMap.put(order,transportWithPricesList.get(0));
             transportWithPricesList = new ArrayList<>();
         }
 

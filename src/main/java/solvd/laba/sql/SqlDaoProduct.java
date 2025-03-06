@@ -16,8 +16,8 @@ public class SqlDaoProduct extends SqlAbstractDao implements IDaoProduct {
         String sqlStatement = "INSERT INTO Products (name, price, volume) VALUES (?, ?, ?)";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, entity.getName());
-            preparedStatement.setBigDecimal(1, entity.getPrice());
-            preparedStatement.setBigDecimal(1, entity.getVolume());
+            preparedStatement.setBigDecimal(2, entity.getPrice());
+            preparedStatement.setBigDecimal(3, entity.getVolume());
             preparedStatement.executeUpdate();
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
