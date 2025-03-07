@@ -35,7 +35,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
         String sqlStatement = "SELECT * FROM Warehouses WHERE id = ?";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     return new Warehouse.Builder()
                             .id(resultSet.getLong("id"))
@@ -57,7 +57,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
     public List<Warehouse> readAll() {
         String sqlStatement = "SELECT * FROM Warehouses";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
-            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<Warehouse> warehouses = new ArrayList<>();
                 while (resultSet.next()) {
                     warehouses.add(new Warehouse.Builder()
@@ -100,9 +100,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
             if ( preparedStatement.executeUpdate() == 0) {
                 return null;
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
         return id;
@@ -150,10 +148,10 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
         String sqlStatement = "SELECT * FROM WarehouseAllowedTransport WHERE warehouse_allowed_transport_id = ?";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<TransportType> transportTypes = new ArrayList<>();
                 while (resultSet.next()) {
-                    transportTypes.add(TransportType.valueOf(resultSet.getString("transport_type_warehouse")));
+                    transportTypes.add(TransportType.valueOf(resultSet.getString("transport_type_warehouse").toUpperCase()));
                 }
                 return transportTypes;
             }

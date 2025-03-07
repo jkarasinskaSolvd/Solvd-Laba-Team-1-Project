@@ -1,6 +1,5 @@
 package solvd.laba.model;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class Warehouse {
@@ -77,5 +76,25 @@ public class Warehouse {
         public Warehouse build() {
             return new Warehouse(this);
         }
+    }
+
+    @Override
+    public String toString() {
+        String string =  "Warehouse{" +
+                "id=" + id +
+                ", address=" + address + " available Products: ";
+
+        for (Product product : availableProducts) {
+            string += ", " + product;
+        }
+
+        string += " allowed transportTypes: ";
+        for (TransportType transportType : allowedTransportTypes) {
+            string += ", " + transportType;
+        }
+
+        string += "}";
+
+        return string;
     }
 }

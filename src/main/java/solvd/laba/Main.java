@@ -1,22 +1,20 @@
 package solvd.laba;
 
-import solvd.laba.idao.IDaoAddress;
-import solvd.laba.idao.IDaoCompany;
-import solvd.laba.idao.IDaoProduct;
-import solvd.laba.model.Address;
-import solvd.laba.model.Company;
-import solvd.laba.model.Product;
-import solvd.laba.service.IAddressService;
-import solvd.laba.service.ICompanyService;
-import solvd.laba.service.IProductService;
-import solvd.laba.service.impl.AddressServiceImpl;
-import solvd.laba.service.impl.CompanyServiceImpl;
-import solvd.laba.service.impl.ProductServiceImpl;
-import solvd.laba.sql.SqlDaoAddress;
-import solvd.laba.sql.SqlDaoCompany;
-import solvd.laba.sql.SqlDaoProduct;
+import solvd.laba.algorithm.Algorithm;
+import solvd.laba.algorithm.TransportWithPrice;
+import solvd.laba.idao.*;
+import solvd.laba.model.*;
+import solvd.laba.service.*;
+import solvd.laba.service.impl.*;
+import solvd.laba.sql.*;
 
-import java.math.BigDecimal;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -92,12 +90,53 @@ public class Main {
 //        addressService.remove(address2.getId());
 //        addressService.remove(address3.getId());
 
-        // adding Logistic Companies
+        IDaoWarehouse warehouseDao = new SqlDaoWarehouse();
+        IWarehouseService warehouseService = new WarehouseServiceImpl(warehouseDao);
 
         IDaoCompany companyDao = new SqlDaoCompany();
         ICompanyService companyService = new CompanyServiceImpl(companyDao);
 
-        Company.Builder companyBuilder = new Company.Builder();
+        IDaoOrder orderDao = new SqlDaoOrder();
+        IOrderService orderService = new OrderServiceImpl(orderDao);
+
+
+        Algorithm algorithm = new Algorithm(warehouseService);
+
+        List<Company> companies = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
+        List<Warehouse> warehouses = new ArrayList<>();
+
+        companies = companyService.readAll();
+        orders = orderService.readAll();
+        warehouses = warehouseService.readAll();
+
+        for (Company company : companies) {
+            System.out.println(company);
+        }
+
+        for (Order order : orders) {
+            System.out.println(order);
+        }
+
+        for (Warehouse warehouse : warehouses) {
+            System.out.println(warehouse);
+        }
+
+        Map< Order, TransportWithPrice> orderTransportWithPriceMap=  algorithm.compare(companies, orders);
+
+        String result = algorithm.printResults(orderTransportWithPriceMap);
+
+        System.out.println(result);
+
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter("src/main/resources/result.txt"));
+            writer.write(result);
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 }

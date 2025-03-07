@@ -44,4 +44,12 @@ public class OrderItem {
             return new OrderItem(this);
         }
     }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "product=" + product +
+                ", quantity=" + quantity +
+                '}';
+    }
 }
