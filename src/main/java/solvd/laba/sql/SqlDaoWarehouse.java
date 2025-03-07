@@ -1,6 +1,8 @@
 package solvd.laba.sql;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import solvd.laba.idao.IDaoWarehouse;
 import solvd.laba.model.Product;
 import solvd.laba.model.TransportType;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
-
+    static final Logger logger = LoggerFactory.getLogger(SqlDaoWarehouse.class);
     @Override
     public Warehouse create(Warehouse entity) {
         String sqlStatement = "INSERT INTO Warehouses (address_id) VALUES (?)";
@@ -21,6 +23,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     entity.setId(generatedKeys.getLong(1));
+                    logger.info("Executed INSERT INTO Warehouses with id {}", entity.getId());
                 }
             }
         } catch (SQLException | InterruptedException e) {
@@ -37,6 +40,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
+                    logger.info("Executed SELECT FROM Warehouses with id {}", id);
                     return new Warehouse.Builder()
                             .id(resultSet.getLong("id"))
                             .address(new SqlDaoAddress().read(resultSet.getLong("address_id")))
@@ -67,6 +71,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
                             .allowedTransportTypes(readTransportTypes(resultSet.getLong("id")))
                             .build());
                 }
+                logger.info("Executed full SELECT FROM Warehouses");
                 return warehouses;
             }
         } catch (SQLException | InterruptedException e) {
@@ -88,6 +93,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
         }
         removeConnections(entity.getId());
         createConnections(entity);
+        logger.info("Executed UPDATE Warehouses with id {}", entity.getId());
         return entity;
     }
 
@@ -103,6 +109,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Executed DELETE FROM Warehouses with id {}", id);
         return id;
     }
 
@@ -112,6 +119,8 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
                 preparedStatement.setLong(1, entity.getId());
                 preparedStatement.setLong(2, product.getId());
+                preparedStatement.executeUpdate();
+                logger.info("Executed INSERT INTO WarehouseProducts with warehouse_id {}", entity.getId());
             } catch (SQLException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -121,6 +130,8 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
                 preparedStatement.setLong(1, entity.getId());
                 preparedStatement.setString(2, transportType.toString());
+                preparedStatement.executeUpdate();
+                logger.info("Executed INSERT INTO WarehouseAllowedTransport with warehouse_allowed_transport_id {}", entity.getId());
             } catch (SQLException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -132,6 +143,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+            logger.info("Executed DELETE FROM WarehouseProducts with warehouse_id {}", id);
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -139,6 +151,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+            logger.info("Executed DELETE FROM WarehouseAllowedTransport with warehouse_allowed_transport_id {}", id);
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -153,6 +166,7 @@ public class SqlDaoWarehouse extends SqlAbstractDao implements IDaoWarehouse {
                 while (resultSet.next()) {
                     transportTypes.add(TransportType.valueOf(resultSet.getString("transport_type_warehouse").toUpperCase()));
                 }
+                logger.info("Executed SELECT FROM WarehouseAllowedTransport with warehouse_allowed_transport_id {}", id);
                 return transportTypes;
             }
         } catch (SQLException | InterruptedException e) {

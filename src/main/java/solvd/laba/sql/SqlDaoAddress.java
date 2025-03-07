@@ -1,5 +1,7 @@
 package solvd.laba.sql;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import solvd.laba.idao.IDaoAddress;
 import solvd.laba.model.Address;
 
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
+    static final Logger logger = LoggerFactory.getLogger(SqlDaoAddress.class);
     @Override
     public Address create(Address entity) {
         String sqlStatement = "INSERT INTO Address (country, city, street, building, apartment, postal_code, coordinate_x, coordinate_y) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -24,6 +27,7 @@ public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     entity.setId(generatedKeys.getLong(1));
+                    logger.info("Executed INSERT INTO Address with id {}", entity.getId());
                 }
             }
         } catch (SQLException | InterruptedException e) {
@@ -39,6 +43,7 @@ public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery();) {
                 if (resultSet.next()) {
+                    logger.info("Executed SELECT FROM Address with id {}", id);
                     return new Address.Builder()
                             .id(resultSet.getLong("id"))
                             .country(resultSet.getString("country"))
@@ -78,6 +83,7 @@ public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
                             .y(resultSet.getDouble("coordinate_y"))
                             .build());
                 }
+                logger.info("Executed full SELECT FROM Address");
                 return addresses;
             }
         } catch (SQLException | InterruptedException e) {
@@ -101,9 +107,11 @@ public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
             if ( preparedStatement.executeUpdate() == 0) {
                 return null;
             }
+            logger.info("Executed UPDATE Address with id {}", entity.getId());
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+
         return entity;
     }
 
@@ -118,6 +126,7 @@ public class SqlDaoAddress extends SqlAbstractDao implements IDaoAddress {
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Executed DELETE FROM Address with id {}", id);
         return id;
     }
 }
