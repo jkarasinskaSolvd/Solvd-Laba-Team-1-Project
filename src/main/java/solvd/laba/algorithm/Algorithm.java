@@ -20,7 +20,7 @@ public class Algorithm {
 
         Map<Warehouse, Double> warehouseWithDistanceMap = new HashMap<>();
 
-        //finding the closest Warehouse that has all ordered products
+
         List<Long> productsIds = order.getOrderItems().stream()
                 .map(orderItem -> orderItem.getProduct().getId())
                 .toList();
