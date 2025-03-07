@@ -7,21 +7,24 @@ Logistics optimization for order fulfillment system, developed in Java and accor
 * Overview
 * System architecture
 * Database model
-* Recommendation algorithms
-* Design patterns
+* Optimising algorithm
 * Project Structure
-* Getting Started
-* Future improvements
+* Prerequisites
 
 ## **Overview**
 
 This application offers logistics optimization for order fulfillment system with several sorting algorithms and inline order optimization that takes into account cost, distance, capacity and volume of orders.
 
 ## **System architecture**
+* Entry Service layer
+* Algorithm
+* Connection layer
+* Database 
+
 ## **Database model**
 
 ![OptimisingLogistics.png](OptimisingLogistics.png)
-## **Recommendation algorithms**
+## **Optimising algorithm**
 1. For each order:
 * Find all warehouses, that have all the products from order
 * Calculate distance between them using Pythagorean theorem
@@ -34,31 +37,15 @@ This application offers logistics optimization for order fulfillment system with
 3. Choose the cheapest company for every order
 * Return order and assigned to it transport, price and company
 
-## **Design patterns**
 
 ## **Project Structure**
+![img.png](src/main/resources/img.png)
 
-## **Getting Started**
-### Prerequisites
+
+## **Prerequisites**
 * Java 17
 * MySQL 8.0+
 * Maven
 
-### Installation
-* Clone the repository:
-  
 
-* Configure database connection in  src/main/resources/config.properties:
-
-  
-* Create the database schema:
-
-
-* Build the project:
-
-* Run the demo:
-
-
-
-## **Future improvements**
 
