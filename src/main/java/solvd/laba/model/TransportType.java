@@ -1,7 +1,7 @@
 package solvd.laba.model;
 
 public enum TransportType {
-    TRACK("Truck"),
+    TRUCK("Truck"),
     TRAIN("Train"),
     AIRPLANE("Airplane");
 

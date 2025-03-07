@@ -116,7 +116,7 @@ public class SqlDaoProduct extends SqlAbstractDao implements IDaoProduct {
             try (ResultSet resultSet = preparedStatement.executeQuery();) {
                 List<Product> products = new ArrayList<>();
                 while (resultSet.next()) {
-                    Product product = read(resultSet.getLong("transport_id"));
+                    Product product = read(resultSet.getLong("product_id"));
                     products.add(product);
                 }
                 return products;

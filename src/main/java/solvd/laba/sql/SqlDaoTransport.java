@@ -35,11 +35,11 @@ public class SqlDaoTransport extends SqlAbstractDao implements IDaoTransport {
         String sqlStatement = "SELECT * FROM Transport WHERE id = ?";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     return new Transport.Builder()
                             .id(resultSet.getLong("id"))
-                            .type(TransportType.valueOf(resultSet.getString("type")))
+                            .type(TransportType.valueOf(resultSet.getString("type").toUpperCase()))
                             .maxCapacity(resultSet.getBigDecimal("max_capacity"))
                             .costPerKm(resultSet.getBigDecimal("cost_per_km"))
                             .build();
@@ -57,12 +57,12 @@ public class SqlDaoTransport extends SqlAbstractDao implements IDaoTransport {
     public List<Transport> readAll() {
         String sqlStatement = "SELECT * FROM Transport";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
-            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<Transport> transports = new ArrayList<>();
                 while (resultSet.next()) {
                     transports.add(new Transport.Builder()
                             .id(resultSet.getLong("id"))
-                            .type(TransportType.valueOf(resultSet.getString("type")))
+                            .type(TransportType.valueOf(resultSet.getString("type").toUpperCase()))
                             .maxCapacity(resultSet.getBigDecimal("max_capacity"))
                             .costPerKm(resultSet.getBigDecimal("cost_per_km"))
                             .build());
@@ -113,7 +113,7 @@ public class SqlDaoTransport extends SqlAbstractDao implements IDaoTransport {
         String sqlStatement = "SELECT * FROM CompanyTransport WHERE company_id = ?";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, companyId);
-            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<Transport> transports = new ArrayList<>();
                 while (resultSet.next()) {
                     Transport transport = read(resultSet.getLong("transport_id"));

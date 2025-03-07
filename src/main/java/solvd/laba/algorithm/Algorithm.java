@@ -1,16 +1,16 @@
 package solvd.laba.algorithm;
 
 import solvd.laba.model.*;
-import solvd.laba.service.impl.WarehouseServiceImpl;
+import solvd.laba.service.IWarehouseService;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 public class Algorithm {
-    private final WarehouseServiceImpl warehouseService;
+    private final IWarehouseService warehouseService;
 
 
-    public Algorithm(WarehouseServiceImpl warehouseService) {
+    public Algorithm(IWarehouseService warehouseService) {
         this.warehouseService = warehouseService;
     }
 
@@ -20,7 +20,7 @@ public class Algorithm {
 
         Map<Warehouse, Double> warehouseWithDistanceMap = new HashMap<>();
 
-        //finding the closest Warehouse that has all ordered products
+
         List<Long> productsIds = order.getOrderItems().stream()
                 .map(orderItem -> orderItem.getProduct().getId())
                 .toList();
@@ -80,9 +80,11 @@ public class Algorithm {
 
 
         for (Transport transport : transports) {
+            Double fullPrice = warehouseWithDistance.getValue();
+            fullPrice = fullPrice * transport.getCostPerKm().toBigInteger().doubleValue();
             transportWithPrices.add(new TransportWithPrice
-                    (transport,
-            warehouseWithDistance.getValue() * transport.getCostPerKm().toBigInteger().doubleValue(),company));
+                    (transport, fullPrice, company
+            ));
         }
 
         transportWithPrices = transportWithPrices.stream()
@@ -104,6 +106,7 @@ public class Algorithm {
                         findCheapestTransportOptionFromLogisticCompany(company, warehouseWithDistance, order));
             }
             transportWithPricesList = transportWithPricesList.stream()
+                    .filter(Objects::nonNull)
                     .sorted(Comparator.comparing(TransportWithPrice::getFullPrice))
                     .toList();
             transportWithPricesMap.put(order,transportWithPricesList.get(0));
@@ -113,12 +116,13 @@ public class Algorithm {
         return  transportWithPricesMap;
     }
 
-    public static void printResults(Map<Order,TransportWithPrice> transportWithPricesMap){
+    public String printResults(Map<Order,TransportWithPrice> transportWithPricesMap){
+        StringBuilder stringBuilder = new StringBuilder("\n\nRESULTS \n\n");
         for (Map.Entry<Order,TransportWithPrice> entry : transportWithPricesMap.entrySet()) {
-            System.out.println(entry.getKey().toString());
-            System.out.println(entry.getValue().toString());
-            System.out.println("----------------------------");
+            stringBuilder.append(entry.getKey().toString()).append('\n');
+            stringBuilder.append(entry.getValue().toString()).append('\n');
+            stringBuilder.append("----------------------------"+'\n');
         }
-
+        return stringBuilder.toString();
     }
 }
