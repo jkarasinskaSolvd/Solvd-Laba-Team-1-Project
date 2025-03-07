@@ -77,4 +77,14 @@ public class Transport {
             return new Transport(this);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Transport{" +
+                "id=" + id +
+                ", type=" + type +
+                ", maxCapacity=" + maxCapacity +
+                ", costPerKm=" + costPerKm +
+                '}';
+    }
 }

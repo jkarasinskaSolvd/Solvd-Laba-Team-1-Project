@@ -1,7 +1,7 @@
 package solvd.laba.model;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Warehouse {
     private Long id;
@@ -77,5 +77,22 @@ public class Warehouse {
         public Warehouse build() {
             return new Warehouse(this);
         }
+    }
+
+    @Override
+    public String toString() {
+        String string =  "Warehouse{" +
+                "id=" + id +
+                ", address=" + address + " available Products: [" +
+                availableProducts.stream()
+                        .map(Product::toString)
+                        .collect(Collectors.joining(", ")) +
+                "], allowed transportTypes: [" +
+                allowedTransportTypes.stream()
+                        .map(TransportType::toString)
+                        .collect(Collectors.joining(", ")) +
+                "]}";
+
+        return string;
     }
 }

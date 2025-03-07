@@ -1,6 +1,5 @@
 package solvd.laba.model;
 
-import java.util.List;
 
 public class OrderItem {
     private Product product;
@@ -44,5 +43,13 @@ public class OrderItem {
         public OrderItem build() {
             return new OrderItem(this);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "product=" + product +
+                ", quantity=" + quantity +
+                '}';
     }
 }

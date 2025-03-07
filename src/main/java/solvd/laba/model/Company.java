@@ -60,5 +60,21 @@ public class Company {
         public Company build() {
             return new Company(this);
         }
+
     }
+
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder("Company{" +
+                "id=" + id +
+                ", name='" + name + '\'' + "avaliable vehicles: ");
+        for (Transport vehicle : availableVehicles) {
+            string.append(", ").append(vehicle);
+        }
+        string.append('}');
+
+
+        return string.toString();
+    }
+
 }

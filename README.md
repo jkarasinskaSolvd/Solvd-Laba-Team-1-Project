@@ -1,24 +1,51 @@
-# Solvd-Laba-Team-1-Projec
-Optimising logistics for order fulfilment:
 
-Warehouses: id, address, list of available products, allowed transport.
+# **Optimising logistics for order fulfilment**
+Logistics optimization for order fulfillment system, developed in Java and according to SOLID principles and enterprise-level design patterns.
 
-Products: id, name, price, volume m3.
+## **Table of contents**
 
-Transport: id, type( track, train, airplane), max capacity m3, cost per km.
+* Overview
+* System architecture
+* Database model
+* Optimising algorithm
+* Project Structure
+* Prerequisites
 
-Logistics companies: id, name, list of available transport vehicles.
+## **Overview**
 
-Order item: id (products), quantity.
+This application offers logistics optimization for order fulfillment system with several sorting algorithms and inline order optimization that takes into account cost, distance, capacity and volume of orders.
 
-Order: id, list of order item, delivery address
+## **System architecture**
+* Entry Service layer
+* Algorithm
+* Connection layer
+* Database 
 
-Address: id, country, city, street, postal code
+## **Database model**
 
-Basic Steps:
-1. Create classes for warehouses, orders, goods, transport and logistics companies.
-2. Implement an algorithm for selecting the optimal transport for order delivery:
-   -find warehouses with the appropriate goods;
-   -calculate the volume of orders;
-   -select the most suitable transport to fulfil the order, taking into account cost and availability
+![OptimisingLogistics.png](OptimisingLogistics.png)
+## **Optimising algorithm**
+1. For each order:
+* Find all warehouses, that have all the products from order
+* Calculate distance between them using Pythagorean theorem
+* Return the closest warehouse
+2. For each company:
+* Check matching transport types with warehouse
+* Check which of them can fit the entire order (by volume)
+* Calculate prices of left transport types
+* Sort by price ang get the cheapest one
+3. Choose the cheapest company for every order
+* Return order and assigned to it transport, price and company
+
+
+## **Project Structure**
+![img.png](src/main/resources/img.png)
+
+
+## **Prerequisites**
+* Java 17
+* MySQL 8.0+
+* Maven
+
+
 

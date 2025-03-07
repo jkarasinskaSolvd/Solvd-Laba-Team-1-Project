@@ -1,8 +1,9 @@
 package solvd.laba.sql;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import solvd.laba.idao.IDaoCompany;
-import solvd.laba.model.Address;
 import solvd.laba.model.Company;
 import solvd.laba.model.Transport;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlDaoCompany extends SqlAbstractDao implements IDaoCompany {
-
+    static final Logger logger = LoggerFactory.getLogger(SqlDaoCompany.class);
     @Override
     public Company create(Company entity) {
         String sqlStatement = "INSERT INTO LogisticsCompanies (name) VALUES (?)";
@@ -21,6 +22,7 @@ public class SqlDaoCompany extends SqlAbstractDao implements IDaoCompany {
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     entity.setId(generatedKeys.getLong(1));
+                    logger.info("Executed INSERT INTO LogisticsCompanies with id {}", entity.getId());
                 }
             }
         } catch (SQLException | InterruptedException e) {
@@ -37,6 +39,7 @@ public class SqlDaoCompany extends SqlAbstractDao implements IDaoCompany {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery();) {
                 if (resultSet.next()) {
+                    logger.info("Executed SELECT FROM LogisticsCompanies with id {}", id);
                     return new Company.Builder()
                             .id(resultSet.getLong("id"))
                             .name(resultSet.getString("name"))
@@ -65,6 +68,7 @@ public class SqlDaoCompany extends SqlAbstractDao implements IDaoCompany {
                             .availableVehicles(new SqlDaoTransport().readByCompany(resultSet.getLong("id")))
                             .build());
                 }
+                logger.info("Executed full SELECT FROM LogisticsCompanies");
                 return companies;
             }
         } catch (SQLException | InterruptedException e) {
@@ -86,6 +90,7 @@ public class SqlDaoCompany extends SqlAbstractDao implements IDaoCompany {
         }
         removeConnections(entity.getId());
         createConnections(entity);
+        logger.info("Executed UPDATE LogisticsCompanies with id {}", entity.getId());
         return entity;
     }
 
@@ -103,6 +108,7 @@ public class SqlDaoCompany extends SqlAbstractDao implements IDaoCompany {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Executed DELETE FROM LogisticsCompanies with id {}", id);
         return id;
     }
 
@@ -112,6 +118,8 @@ public class SqlDaoCompany extends SqlAbstractDao implements IDaoCompany {
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
                 preparedStatement.setLong(1, entity.getId());
                 preparedStatement.setLong(2, transport.getId());
+                preparedStatement.executeUpdate();
+                logger.info("Executed INSERT INTO CompanyTransport with company_id {}", entity.getId());
             } catch (SQLException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -123,6 +131,7 @@ public class SqlDaoCompany extends SqlAbstractDao implements IDaoCompany {
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+            logger.info("Executed DELETE FROM CompanyTransport with company_id {}", id);
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }

@@ -1,0 +1,19 @@
+
+
+RESULTS 
+
+Order{id=1, orderItems=[OrderItem{product=Product{id=1, name='Laptop', price=1200.00, volume=0.50}, quantity=2}, OrderItem{product=Product{id=2, name='Smartphone', price=800.00, volume=0.20}, quantity=1}], address=Address{id=1, country='Poland', city='Warsaw', street='Main St', building='10', apartment='2A', postalCode='00-001', x=52.2298, y=21.0122}}
+TransportWithPrice{transport=Transport{id=1, type=Truck, maxCapacity=1000.00, costPerKm=2.50}, fullPrice=0.0, logistic company name=FastLogistics}
+----------------------------
+Order{id=3, orderItems=[OrderItem{product=Product{id=4, name='Monitor', price=300.00, volume=1.00}, quantity=1}], address=Address{id=3, country='Germany', city='Berlin', street='Alexanderplatz', building='15', apartment='3C', postalCode='10178', x=52.5218, y=13.4132}}
+TransportWithPrice{transport=Transport{id=2, type=Train, maxCapacity=5000.00, costPerKm=1.80}, fullPrice=29.86140334076749, logistic company name=FastLogistics}
+----------------------------
+Order{id=4, orderItems=[OrderItem{product=Product{id=5, name='Keyboard', price=50.00, volume=0.10}, quantity=2}], address=Address{id=4, country='France', city='Paris', street='Champs Elysees', building='22', apartment='4D', postalCode='75008', x=48.8698, y=2.3076}}
+TransportWithPrice{transport=Transport{id=3, type=Airplane, maxCapacity=10000.00, costPerKm=5.00}, fullPrice=177.41611889848116, logistic company name=GlobalExpress}
+----------------------------
+Order{id=2, orderItems=[OrderItem{product=Product{id=3, name='Tablet', price=500.00, volume=0.30}, quantity=3}], address=Address{id=2, country='Poland', city='Krakow', street='Market Sq', building='5', apartment='1B', postalCode='30-002', x=50.0647, y=19.945}}
+TransportWithPrice{transport=Transport{id=1, type=Truck, maxCapacity=1000.00, costPerKm=2.50}, fullPrice=76.537165118392, logistic company name=FastLogistics}
+----------------------------
+Order{id=5, orderItems=[], address=Address{id=5, country='Spain', city='Madrid', street='Gran Via', building='8', apartment='5E', postalCode='28013', x=40.4204, y=-3.7058}}
+TransportWithPrice{transport=Transport{id=2, type=Train, maxCapacity=5000.00, costPerKm=1.80}, fullPrice=27.39418647012537, logistic company name=FastLogistics}
+----------------------------

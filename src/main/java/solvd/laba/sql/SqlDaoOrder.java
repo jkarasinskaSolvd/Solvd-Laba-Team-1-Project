@@ -1,5 +1,7 @@
 package solvd.laba.sql;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import solvd.laba.idao.IDaoOrder;
 import solvd.laba.model.Order;
 import solvd.laba.model.OrderItem;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlDaoOrder extends SqlAbstractDao implements IDaoOrder {
+    static final Logger logger = LoggerFactory.getLogger(SqlDaoOrder.class);
     SqlDaoOrderItem sqlDaoOrderItem = new SqlDaoOrderItem();
     @Override
     public Order create(Order entity) {
@@ -19,6 +22,7 @@ public class SqlDaoOrder extends SqlAbstractDao implements IDaoOrder {
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     entity.setId(generatedKeys.getLong(1));
+                    logger.info("Executed INSERT INTO Orders with id {}", entity.getId());
                 }
             }
         } catch (SQLException | InterruptedException e) {
@@ -38,6 +42,7 @@ public class SqlDaoOrder extends SqlAbstractDao implements IDaoOrder {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery();) {
                 if (resultSet.next()) {
+                    logger.info("Executed SELECT FROM Orders with id {}", id);
                     return new Order.Builder()
                             .id(resultSet.getLong("id"))
                             .address(new SqlDaoAddress().read(resultSet.getLong("delivery_address_id")))
@@ -65,6 +70,7 @@ public class SqlDaoOrder extends SqlAbstractDao implements IDaoOrder {
                             .orderItems(new SqlDaoOrderItem().readByOrder(resultSet.getLong("id")))
                             .build());
                 }
+                logger.info("Executed full SELECT FROM Orders");
                 return orders;
             }
         } catch (SQLException | InterruptedException e) {
@@ -91,6 +97,7 @@ public class SqlDaoOrder extends SqlAbstractDao implements IDaoOrder {
         {
             sqlDaoOrderItem.createByOrder(item, entity.getId());
         }
+        logger.info("Executed UPDATE Orders with id {}", entity.getId());
         return entity;
     }
 
@@ -106,6 +113,7 @@ public class SqlDaoOrder extends SqlAbstractDao implements IDaoOrder {
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Executed DELETE FROM Orders with id {}", id);
         return id;
     }
 }

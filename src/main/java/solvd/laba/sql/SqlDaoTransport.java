@@ -1,6 +1,8 @@
 package solvd.laba.sql;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import solvd.laba.idao.IDaoTransport;
 import solvd.laba.model.Transport;
 import solvd.laba.model.TransportType;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlDaoTransport extends SqlAbstractDao implements IDaoTransport {
-
+    static final Logger logger = LoggerFactory.getLogger(SqlDaoTransport.class);
     @Override
     public Transport create(Transport entity) {
         String sqlStatement = "INSERT INTO Transport (type, max_capacity, cost_per_km) VALUES (?, ?, ?)";
@@ -22,6 +24,7 @@ public class SqlDaoTransport extends SqlAbstractDao implements IDaoTransport {
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     entity.setId(generatedKeys.getLong(1));
+                    logger.info("Executed INSERT INTO Transport with id {}", entity.getId());
                 }
             }
         } catch (SQLException | InterruptedException e) {
@@ -35,11 +38,12 @@ public class SqlDaoTransport extends SqlAbstractDao implements IDaoTransport {
         String sqlStatement = "SELECT * FROM Transport WHERE id = ?";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
+                    logger.info("Executed SELECT FROM Transport with id {}", id);
                     return new Transport.Builder()
                             .id(resultSet.getLong("id"))
-                            .type(TransportType.valueOf(resultSet.getString("type")))
+                            .type(TransportType.valueOf(resultSet.getString("type").toUpperCase()))
                             .maxCapacity(resultSet.getBigDecimal("max_capacity"))
                             .costPerKm(resultSet.getBigDecimal("cost_per_km"))
                             .build();
@@ -57,16 +61,17 @@ public class SqlDaoTransport extends SqlAbstractDao implements IDaoTransport {
     public List<Transport> readAll() {
         String sqlStatement = "SELECT * FROM Transport";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
-            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<Transport> transports = new ArrayList<>();
                 while (resultSet.next()) {
                     transports.add(new Transport.Builder()
                             .id(resultSet.getLong("id"))
-                            .type(TransportType.valueOf(resultSet.getString("type")))
+                            .type(TransportType.valueOf(resultSet.getString("type").toUpperCase()))
                             .maxCapacity(resultSet.getBigDecimal("max_capacity"))
                             .costPerKm(resultSet.getBigDecimal("cost_per_km"))
                             .build());
                 }
+                logger.info("Executed full SELECT FROM Transport");
                 return transports;
             }
         } catch (SQLException | InterruptedException e) {
@@ -88,6 +93,7 @@ public class SqlDaoTransport extends SqlAbstractDao implements IDaoTransport {
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Executed UPDATE Transport with id {}", entity.getId());
         return entity;
     }
 
@@ -105,6 +111,7 @@ public class SqlDaoTransport extends SqlAbstractDao implements IDaoTransport {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Executed DELETE FROM Transport with id {}", id);
         return id;
     }
 
@@ -113,7 +120,8 @@ public class SqlDaoTransport extends SqlAbstractDao implements IDaoTransport {
         String sqlStatement = "SELECT * FROM CompanyTransport WHERE company_id = ?";
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, companyId);
-            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                logger.info("Executed SELECT FROM CompanyTransport with company_id {}", companyId);
                 List<Transport> transports = new ArrayList<>();
                 while (resultSet.next()) {
                     Transport transport = read(resultSet.getLong("transport_id"));
@@ -131,6 +139,7 @@ public class SqlDaoTransport extends SqlAbstractDao implements IDaoTransport {
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+            logger.info("Executed DELETE FROM CompanyTransport with transport_id {}", id);
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
