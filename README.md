@@ -23,7 +23,7 @@ This application offers logistics optimization for order fulfillment system with
 
 ## **Database model**
 
-![OptimisingLogistics.png](OptimisingLogistics.png)
+![OptimisingLogistics.png](src/main/resources/OptimisingLogistics.png)
 ## **Optimising algorithm**
 1. For each order:
 * Find all warehouses, that have all the products from order
