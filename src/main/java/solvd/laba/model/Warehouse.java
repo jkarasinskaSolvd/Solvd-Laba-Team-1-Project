@@ -1,6 +1,7 @@
 package solvd.laba.model;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Warehouse {
     private Long id;
@@ -82,18 +83,15 @@ public class Warehouse {
     public String toString() {
         String string =  "Warehouse{" +
                 "id=" + id +
-                ", address=" + address + " available Products: ";
-
-        for (Product product : availableProducts) {
-            string += ", " + product;
-        }
-
-        string += " allowed transportTypes: ";
-        for (TransportType transportType : allowedTransportTypes) {
-            string += ", " + transportType;
-        }
-
-        string += "}";
+                ", address=" + address + " available Products: [" +
+                availableProducts.stream()
+                        .map(Product::toString)
+                        .collect(Collectors.joining(", ")) +
+                "], allowed transportTypes: [" +
+                allowedTransportTypes.stream()
+                        .map(TransportType::toString)
+                        .collect(Collectors.joining(", ")) +
+                "]}";
 
         return string;
     }
