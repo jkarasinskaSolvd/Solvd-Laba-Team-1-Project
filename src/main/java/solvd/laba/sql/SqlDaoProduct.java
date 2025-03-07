@@ -1,6 +1,8 @@
 package solvd.laba.sql;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import solvd.laba.idao.IDaoProduct;
 import solvd.laba.model.Product;
 
@@ -9,8 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlDaoProduct extends SqlAbstractDao implements IDaoProduct {
-
-
+    static final Logger logger = LoggerFactory.getLogger(SqlDaoProduct.class);
     @Override
     public Product create(Product entity) {
         String sqlStatement = "INSERT INTO Products (name, price, volume) VALUES (?, ?, ?)";
@@ -22,6 +23,7 @@ public class SqlDaoProduct extends SqlAbstractDao implements IDaoProduct {
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     entity.setId(generatedKeys.getLong(1));
+                    logger.info("Executed INSERT INTO Products with id {}", entity.getId());
                 }
             }
         } catch (SQLException | InterruptedException e) {
@@ -37,6 +39,7 @@ public class SqlDaoProduct extends SqlAbstractDao implements IDaoProduct {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery();) {
                 if (resultSet.next()) {
+                    logger.info("Executed SELECT FROM Products with id {}", id);
                     return new Product.Builder()
                             .id(resultSet.getLong("id"))
                             .name(resultSet.getString("name"))
@@ -67,6 +70,7 @@ public class SqlDaoProduct extends SqlAbstractDao implements IDaoProduct {
                             .volume(resultSet.getBigDecimal("volume"))
                             .build());
                 }
+                logger.info("Executed full SELECT FROM Products");
                 return products;
             }
         } catch (SQLException | InterruptedException e) {
@@ -88,6 +92,7 @@ public class SqlDaoProduct extends SqlAbstractDao implements IDaoProduct {
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Executed UPDATE Products with id {}", entity.getId());
         return entity;
     }
 
@@ -105,6 +110,7 @@ public class SqlDaoProduct extends SqlAbstractDao implements IDaoProduct {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Executed DELETE FROM Products with id {}", id);
         return id;
     }
 
@@ -114,6 +120,7 @@ public class SqlDaoProduct extends SqlAbstractDao implements IDaoProduct {
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, warehouseId);
             try (ResultSet resultSet = preparedStatement.executeQuery();) {
+                logger.info("Executed SELECT FROM WarehouseProducts with warehouse_id {}", warehouseId);
                 List<Product> products = new ArrayList<>();
                 while (resultSet.next()) {
                     Product product = read(resultSet.getLong("product_id"));
@@ -131,6 +138,7 @@ public class SqlDaoProduct extends SqlAbstractDao implements IDaoProduct {
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+            logger.info("Executed DELETE FROM WarehouseProducts with warehouse_id {}", id);
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }

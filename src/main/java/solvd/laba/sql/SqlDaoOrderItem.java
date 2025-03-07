@@ -1,5 +1,7 @@
 package solvd.laba.sql;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import solvd.laba.idao.IDaoOrderItem;
 import solvd.laba.model.OrderItem;
 
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
+    static final Logger logger = LoggerFactory.getLogger(SqlDaoOrderItem.class);
     //Impossible to implement (too little data)
     @Override
     public OrderItem create(OrderItem entity) {
@@ -22,6 +25,7 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
             preparedStatement.setLong(2, entity.getProduct().getId());
             preparedStatement.setInt(3, entity.getQuantity());
             preparedStatement.executeUpdate();
+            logger.info("Executed INSERT INTO OrderItems with order_id {}", orderId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -44,6 +48,7 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
             preparedStatement.setLong(2, productId);
             try (ResultSet resultSet = preparedStatement.executeQuery();) {
                 if (resultSet.next()) {
+                    logger.info("Executed SELECT FROM OrderItems with order_id {} and product_id_order_items {}", orderId, productId);
                     return new OrderItem.Builder()
                             .product(new SqlDaoProduct().read(resultSet.getLong("product_id_order_items")))
                             .quantity(resultSet.getInt("quantity_order_items"))
@@ -69,6 +74,7 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
                             .quantity(resultSet.getInt("quantity_order_items"))
                             .build());
                 }
+                logger.info("Executed full SELECT FROM OrderItems");
                 return items;
             }
         } catch (SQLException | InterruptedException e) {
@@ -89,6 +95,7 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
                             .quantity(resultSet.getInt("quantity_order_items"))
                             .build());
                 }
+                logger.info("Executed SELECT FROM OrderItems with order_id {}", orderId);
                 return items;
             }
         } catch (SQLException | InterruptedException e) {
@@ -115,6 +122,7 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Executed UPDATE OrderItems with order_id {}", orderId);
         return entity;
     }
 
@@ -137,6 +145,7 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Executed DELETE FROM OrderItems with order_id {} and product_id_order_items {}", orderId, productId);
         return true;
     }
 
@@ -151,6 +160,7 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Executed DELETE FROM OrderItems with order_id {}", orderId);
         return true;
     }
 
@@ -165,6 +175,7 @@ public class SqlDaoOrderItem extends SqlAbstractDao implements IDaoOrderItem {
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Executed DELETE FROM OrderItems with product_id_order_items {}", productId);
         return true;
     }
 
